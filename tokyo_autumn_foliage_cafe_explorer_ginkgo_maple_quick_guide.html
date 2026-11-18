@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokyo Autumn Foliage &amp; Cafe Explorer: Ginkgo &amp; Maple Quick Guide</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 12% 8%, #2a1205 0%, #110c0a 45%, #070709 100%);
+      color: #fafaf9;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Autumn Leaf Glow */
+    .autumn-orb {
+      position: fixed;
+      border-radius: 9999px;
+      filter: blur(55px);
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+      animation: driftOrb 18s infinite alternate ease-in-out;
+    }
+
+    @keyframes driftOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -22px) scale(1.12); }
+    }
+
+    /* Glass Panels & Cards */
+    .glass-panel {
+      background: rgba(24, 18, 15, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(251, 191, 36, 0.16);
+      box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.65);
+    }
+
+    .spot-card {
+      background: rgba(28, 21, 18, 0.84);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(251, 191, 36, 0.16);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .spot-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(251, 191, 36, 0.5);
+      box-shadow: 0 18px 38px -10px rgba(0, 0, 0, 0.75);
+    }
+
+    .spot-card.highlighted {
+      border-color: #fbbf24;
+      box-shadow: 0 0 28px rgba(251, 191, 36, 0.35);
+    }
+
+    .spot-card img {
+      transition: transform 0.45s ease;
+    }
+
+    .spot-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .map-node {
+      cursor: pointer;
+    }
+    .map-node:hover circle.core {
+      r: 8.5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(12, 10, 9, 0.9);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.3);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-400/30 selection:text-amber-200">
+
+  <!-- Ambient Floating Orbs -->
+  <div aria-hidden="true">
+    <div class="autumn-orb w-80 h-80 bg-amber-500 -top-16 left-[6%]"></div>
+    <div class="autumn-orb w-96 h-96 bg-red-600 top-[26%] -right-20" style="animation-delay: -5s;"></div>
+    <div class="autumn-orb w-72 h-72 bg-orange-500 bottom-[6%] left-[20%]" style="animation-delay: -9s;"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="relative z-10 max-w-[1380px] mx-auto px-4 sm:px-6 pt-7 pb-16 space-y-6">
+
+    <!-- 1. HEADER -->
+    <header class="flex flex-wrap justify-between items-end gap-4 pb-5 border-b border-amber-400/15">
+      <div>
+        <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-amber-300 bg-amber-500/15 border border-amber-400/30 px-3 py-1 rounded-full mb-2.5">
+          <span>🍁 Social Media &amp; JMC 2026 Forecast Collated • Tokyo Autumn Explorer</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-amber-200 via-orange-300 to-rose-300 bg-clip-text text-transparent">
+          Tokyo Ginkgo &amp; Maple Sightseeing Quick Guide
+        </h1>
+        <p class="text-stone-300 text-sm sm:text-base max-w-3xl mt-1.5 leading-relaxed">
+          Interactive visualization of Tokyo's most viral &amp; scenic ginkgo (<em>ichō</em>) and maple (<em>momiji</em>) spots—complete with site photography, composite social/traveler ratings, live foliage status (Approaching Peak, At Peak, Past Peak), crowd size, and surrounding cafes.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button type="button" onclick="resetFilters()"
+          class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-stone-800/90 hover:bg-stone-700 text-stone-100 border border-amber-400/20 hover:border-amber-400/50 transition">
+          Reset Filters
+        </button>
+        <button type="button" onclick="copyPlan()"
+          class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-400 to-orange-500 hover:brightness-110 text-stone-950 shadow-lg transition">
+          📋 Copy Foliage &amp; Cafe Plan
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. KPI SNAPSHOT -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div class="glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-1">Curated Foliage Spots</div>
+        <div id="kpiCount" class="text-2xl sm:text-3xl font-extrabold text-white">14</div>
+        <div class="text-xs text-stone-400 mt-1">Tokyo + Kamakura day-trip gems</div>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-1">At Peak Colors Now</div>
+        <div id="kpiAtPeak" class="text-2xl sm:text-3xl font-extrabold text-amber-400">4 Spots</div>
+        <div id="kpiStatusLabel" class="text-xs text-stone-400 mt-1">Live status for Nov 18, 2026</div>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-1">Approaching Peak</div>
+        <div id="kpiApproaching" class="text-2xl sm:text-3xl font-extrabold text-emerald-400">10 Spots</div>
+        <div class="text-xs text-stone-400 mt-1">Prime for Nov 21 – Dec 3 arrival</div>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1">Top Rated Spot</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-rose-400">4.9 ★</div>
+        <div class="text-xs text-stone-400 mt-1">Rikugien &amp; Meiji Jingu Gaien</div>
+      </div>
+    </section>
+
+    <!-- 3. FILTER & SEARCH BAR -->
+    <section class="glass-panel rounded-2xl p-4 sm:p-5 space-y-3.5">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Foliage Status Selector (Live / Trip Date Simulation) -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-stone-400 font-bold uppercase tracking-wider">Check Foliage Date:</span>
+          <select id="checkDateSelect" onchange="renderAll()"
+            class="px-3 py-1.5 rounded-xl bg-stone-950 border border-amber-400/35 text-xs font-bold text-amber-200 focus:outline-none focus:border-amber-400">
+            <option value="2026-11-18" selected>Today • Nov 18, 2026 (Live Status)</option>
+            <option value="2026-11-22">Sat • Nov 22, 2026 (Early Trip)</option>
+            <option value="2026-11-26">Thu • Nov 26, 2026 (Mid Trip)</option>
+            <option value="2026-11-30">Mon • Nov 30, 2026 (Late Nov)</option>
+            <option value="2026-12-03">Thu • Dec 3, 2026 (Early Dec)</option>
+          </select>
+        </div>
+
+        <!-- Foliage Status Filter -->
+        <div id="statusFilters" class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-stone-400 font-bold uppercase tracking-wider">Color Status:</span>
+          <button type="button" data-status="all" onclick="setStatusFilter('all')"
+            class="filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition">All Statuses</button>
+          <button type="button" data-status="peak" onclick="setStatusFilter('peak')"
+            class="filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition">🔥 At Peak Colors</button>
+          <button type="button" data-status="approaching" onclick="setStatusFilter('approaching')"
+            class="filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition">🌱 Approaching Peak</button>
+          <button type="button" data-status="past" onclick="setStatusFilter('past')"
+            class="filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition">🍂 Past Peak / Carpet</button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-700/50">
+        <!-- Tree Species Filter -->
+        <div id="treeFilters" class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-stone-400 font-bold uppercase tracking-wider">Foliage Type:</span>
+          <button type="button" data-tree="all" onclick="setTreeFilter('all')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">All Foliage (14)</button>
+          <button type="button" data-tree="ginkgo" onclick="setTreeFilter('ginkgo')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🟡 Golden Ginkgo</button>
+          <button type="button" data-tree="maple" onclick="setTreeFilter('maple')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🍁 Crimson Maple</button>
+          <button type="button" data-tree="both" onclick="setTreeFilter('both')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🍂 Ginkgo + Maple Mix</button>
+        </div>
+
+        <!-- Crowd Level Filter -->
+        <div id="crowdFilters" class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-stone-400 font-bold uppercase tracking-wider">Crowd Size:</span>
+          <button type="button" data-crowd="all" onclick="setCrowdFilter('all')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">Any Crowd</button>
+          <button type="button" data-crowd="Low" onclick="setCrowdFilter('Low')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🟢 Low / Hidden Gem</button>
+          <button type="button" data-crowd="Moderate" onclick="setCrowdFilter('Moderate')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🟡 Moderate</button>
+          <button type="button" data-crowd="High" onclick="setCrowdFilter('High')"
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border transition">🔴 High / Viral Hotspot</button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-700/50">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-stone-300">
+          <label class="inline-flex items-center gap-2 cursor-pointer select-none bg-stone-900/80 border border-amber-400/20 px-3 py-1.5 rounded-xl">
+            <input type="checkbox" id="nightOnlyToggle" onchange="renderAll()" class="accent-amber-400 w-4 h-4 rounded" />
+            <span>🌙 Has Evening Light-Up / Night Illumination</span>
+          </label>
+          <label class="inline-flex items-center gap-2 cursor-pointer select-none bg-stone-900/80 border border-amber-400/20 px-3 py-1.5 rounded-xl">
+            <input type="checkbox" id="freeOnlyToggle" onchange="renderAll()" class="accent-amber-400 w-4 h-4 rounded" />
+            <span>🎟️ Free Admission Only</span>
+          </label>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <select id="sortSelect" onchange="renderAll()"
+            class="px-3 py-2 rounded-xl bg-stone-950/90 border border-amber-400/20 text-xs font-semibold text-stone-200 focus:outline-none focus:border-amber-400">
+            <option value="rating">Sort: Highest Rating ★</option>
+            <option value="status">Sort: Peak Status First</option>
+            <option value="crowdAsc">Sort: Lowest Crowd First</option>
+          </select>
+          <input type="text" id="searchInput" oninput="renderAll()"
+            placeholder="Search spot, cafe, station, attraction..."
+            class="w-full sm:w-64 px-3.5 py-2 rounded-xl bg-stone-950/90 border border-amber-400/20 text-sm text-white placeholder-stone-400 focus:outline-none focus:border-amber-400 transition" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. INTERACTIVE CROWD METER & TOKYO FOLIAGE CLUSTER MAP -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <!-- Crowd & Rating Buzz Visualization -->
+      <div class="lg:col-span-7 glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h2 class="text-base sm:text-lg font-bold text-white">📊 Social Buzz, Crowd Density &amp; Peak Status</h2>
+          <span class="text-xs text-stone-400">Click any bar to jump to photo &amp; cafes</span>
+        </div>
+        <div id="crowdChart" class="space-y-2 max-h-[395px] overflow-y-auto pr-1"></div>
+      </div>
+
+      <!-- Interactive Tokyo Cluster Map -->
+      <div class="lg:col-span-5 glass-panel rounded-2xl p-4 sm:p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h2 class="text-base sm:text-lg font-bold text-white">🗺️ Tokyo Ginkgo &amp; Maple Cluster Map</h2>
+          <span class="text-xs text-stone-400">Click a node to highlight</span>
+        </div>
+        <div class="relative rounded-2xl border border-amber-400/15 overflow-hidden h-[395px]"
+          style="background: radial-gradient(circle at 50% 50%, #1c1410 0%, #0c0908 100%);">
+          <svg id="foliageMap" viewBox="0 0 500 390" class="w-full h-full block"></svg>
+          <div class="absolute bottom-2.5 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-stone-950/85 border border-amber-400/15 px-3 py-1.5 rounded-xl text-[11px] text-stone-300 backdrop-blur-md">
+            <span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></i>Golden Ginkgo</span>
+            <span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></i>Crimson Maple</span>
+            <span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-orange-400 inline-block"></i>Mixed</span>
+            <span class="text-amber-300 font-semibold">★ Click node</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SAVED FOLIAGE & CAFE HOPPING LIST -->
+    <section class="glass-panel rounded-2xl p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+        <h2 class="text-base sm:text-lg font-bold text-white">
+          ☕ My Saved Foliage &amp; Cafe Hopping List (<span id="savedCount" class="text-amber-400">3</span> spots)
+        </h2>
+        <button type="button" onclick="clearSaved()"
+          class="px-3 py-1 rounded-lg text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600/40 transition">
+          Clear List
+        </button>
+      </div>
+      <p class="text-xs text-stone-400">Star any card below to save its foliage spot, recommended cafe, and nearby attraction to your custom itinerary.</p>
+      <div id="savedList" class="flex flex-wrap gap-2 mt-3"></div>
+    </section>
+
+    <!-- 6. DETAILED SPOT CARDS GRID -->
+    <section id="spotsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></section>
+  </div>
+
+  <!-- PHOTO LIGHTBOX MODAL -->
+  <div id="lightbox" onclick="closeLightbox(event)"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
+    <div onclick="event.stopPropagation()"
+      class="max-w-4xl w-full bg-stone-900 border border-amber-400/25 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="relative bg-black">
+        <img id="lightboxImg" src="" alt="" class="w-full max-h-[65vh] object-contain mx-auto block" />
+        <div id="lightboxStatusPill" class="absolute top-3 left-3"></div>
+      </div>
+      <div class="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="lightboxTitle" class="font-bold text-base sm:text-lg text-white"></span>
+            <span id="lightboxRating" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40"></span>
+          </div>
+          <div id="lightboxSub" class="text-xs sm:text-sm text-stone-400 mt-0.5"></div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a id="lightboxIg" href="#" target="_blank" rel="noopener"
+            class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-white border border-amber-400/25 transition">
+            📸 Instagram Tag
+          </a>
+          <a id="lightboxTt" href="#" target="_blank" rel="noopener"
+            class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-white border border-amber-400/25 transition">
+            🎵 TikTok Clips
+          </a>
+          <button type="button" onclick="closeLightbox()"
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 to-orange-500 text-stone-950 hover:brightness-110 transition">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"
+    class="fixed bottom-6 right-6 z-50 bg-amber-400 text-stone-950 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
+    Copied foliage &amp; cafe plan!
+  </div>
+
+  <script>
+    const SPOTS = [
+      {
+        id: "jingu_gaien",
+        name: "Meiji Jingu Gaien Ginkgo Avenue",
+        jp: "明治神宮外苑 いちょう並木",
+        tree: "ginkgo",
+        treeLabel: "146 Golden Ginkgo Trees",
+        rating: 4.9,
+        reviewCount: "18,400+ social & map reviews",
+        peak: "Nov 22 – Dec 3",
+        peakStart: "2026-11-22",
+        peakEnd: "2026-12-03",
+        colorProgress: "70% Golden Yellow (Turning rapidly; full canopy peak Nov 22–Dec 3)",
+        crowd: "High",
+        crowdScore: 95,
+        crowdNote: "Very crowded 10:30–16:30; arrive before 08:30 for empty golden tunnel shots.",
+        admission: "Free",
+        free: true,
+        nightLight: false,
+        station: "Gaienmae / Aoyama-Itchome (3 min walk)",
+        x: 195, y: 215,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Jingu_Gaien_Ginkgo_Street_2014_%E2%85%A1.JPG?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Meiji_Jingu_Gaien_Ginkgo_Avenue.jpg?width=1000",
+        photoCaption: "Four-row golden ginkgo avenue leading toward Meiji Memorial Picture Gallery",
+        igTag: "神宮外苑いちょう並木",
+        ttQuery: "Meiji Jingu Gaien Ginkgo Tokyo autumn",
+        cafes: [
+          "Shake Shack Gaien Ichonamiki (patio directly under the golden ginkgos)",
+          "Kihachi Aoyama Honten (terrace seats facing the avenue, famous chestnut Mont Blanc)",
+          "Royal Garden Cafe Aoyama (balcony tables overlooking the tree tunnel)"
+        ],
+        attractions: [
+          "Meiji Memorial Picture Gallery at the avenue's northern focal point",
+          "Omotesando & Minami-Aoyama luxury architecture boutiques (12 min walk)",
+          "Tokyo Midtown & Hinokicho Park (15 min walk)"
+        ],
+        socialTip: "Viral on IG/TikTok for low-angle shots on the fallen yellow leaf carpet; avoid standing in the active roadway."
+      },
+      {
+        id: "rikugien",
+        name: "Rikugien Gardens",
+        jp: "六義園",
+        tree: "maple",
+        treeLabel: "400+ Crimson Iroha-momiji Maples",
+        rating: 4.9,
+        reviewCount: "14,200+ social & map reviews",
+        peak: "Nov 25 – Dec 8",
+        peakStart: "2026-11-25",
+        peakEnd: "2026-12-08",
+        colorProgress: "60% Crimson/Amber (Upper maple crowns turning; full reflection peak Nov 25–Dec 8)",
+        crowd: "High",
+        crowdScore: 90,
+        crowdNote: "Heavy queues during 18:00–20:30 evening light-up (Nov 25 – Dec 6); buy timed online tickets ahead.",
+        admission: "¥300 Day / ¥1,000–¥1,200 Night",
+        free: false,
+        nightLight: true,
+        station: "JR Komagome Station (2–7 min walk)",
+        x: 278, y: 78,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Rikugien_at_night_01.JPG?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Rikugien_Gardens_autumn_leaves_2013.jpg?width=1000",
+        photoCaption: "Illuminated scarlet momiji reflecting in Rikugien's central pond",
+        igTag: "六義園紅葉",
+        ttQuery: "Rikugien autumn illumination Tokyo",
+        cafes: [
+          "Fukiage Chaya (traditional lakeside teahouse inside the garden serving matcha & wagashi)",
+          "Niki Bakery & Cafe Komagome (cozy station-side pastry & coffee stop)",
+          "Rikugien Garden Cafe (light bites and warm amazake near the main gate)"
+        ],
+        attractions: [
+          "Togetsukyo Stone Bridge & Tsutsuji-chaya rustic maple pavilion",
+          "Kyu-Furukawa Gardens (15 min walk north for Western mansion + Japanese maple garden)",
+          "Sugamo Jizo-dori Shopping Street (1 stop away for red-bean daifuku)"
+        ],
+        socialTip: "Daytime tickets do not roll over into the 18:00 illumination; book the ¥1,000 advance online slot."
+      },
+      {
+        id: "shinjuku_gyoen",
+        name: "Shinjuku Gyoen National Garden",
+        jp: "新宿御苑",
+        tree: "both",
+        treeLabel: "Giant Ginkgos + Momiji Hill Maples",
+        rating: 4.8,
+        reviewCount: "31,500+ social & map reviews",
+        peak: "Nov 18 – Dec 6",
+        peakStart: "2026-11-18",
+        peakEnd: "2026-12-06",
+        colorProgress: "85% Peak Color (Sycamore allee & early maples at peak; Momijiyama peaking now)",
+        crowd: "High",
+        crowdScore: 84,
+        crowdNote: "Spacious 58-hectare grounds absorb crowds well; busiest near Momijiyama & Starbucks on weekends.",
+        admission: "¥500 (Closed Mondays)",
+        free: false,
+        nightLight: false,
+        station: "Shinjuku-Gyoemmae / Sendagaya (5 min walk)",
+        x: 145, y: 185,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Shinjuku_Gyoen_National_Garden_-_momiji.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Shinjuku_Gyoen_in_autumn_2014.jpg?width=1000",
+        photoCaption: "Fiery crimson maple foliage along Shinjuku Gyoen's Japanese pond",
+        igTag: "新宿御苑紅葉",
+        ttQuery: "Shinjuku Gyoen autumn foliage Tokyo",
+        cafes: [
+          "Starbucks Coffee Shinjuku Gyoen (cedar-clad glass cafe overlooking the pond)",
+          "Rakuu Teahouse (authentic matcha inside the Japanese Traditional Garden)",
+          "4/4 Seasons Coffee (top-rated specialty pour-over roaster 3 min from Shinjuku Gate)"
+        ],
+        attractions: [
+          "Taiwan Pavilion (Kyu-Goryotei) reflected in the Upper Pond",
+          "French Formal Platanus Sycamore Allee (golden tunnel near Okido Gate)",
+          "Shinjuku Minami Lumi winter lights at Shinjuku South Exit (10 min walk)"
+        ],
+        socialTip: "Enter via Sendagaya Gate at 09:00 sharp for uncrowded access to Maple Hill (Momijiyama)."
+      },
+      {
+        id: "koishikawa_korakuen",
+        name: "Koishikawa Korakuen Gardens",
+        jp: "小石川後楽園",
+        tree: "both",
+        treeLabel: "Crimson Maples & Golden Ginkgo",
+        rating: 4.7,
+        reviewCount: "9,800+ social & map reviews",
+        peak: "Nov 18 – Dec 2",
+        peakStart: "2026-11-18",
+        peakEnd: "2026-12-02",
+        colorProgress: "85% Peak Color (Tsutenkyo bridge maples & Daisensui pond trees glowing crimson)",
+        crowd: "Moderate",
+        crowdScore: 68,
+        crowdNote: "Noticeably calmer than Rikugien; night special opening runs Nov 13 – Nov 24 (18:00–21:00).",
+        admission: "¥300 Day / ¥1,000 Night",
+        free: false,
+        nightLight: true,
+        station: "Iidabashi / Korakuen (3–8 min walk)",
+        x: 264, y: 126,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Koishikawa_Korakuen_in_autumn_2014-11.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Koishikawa_Korakuen_Garden_autumn.jpg?width=1000",
+        photoCaption: "Scarlet maples framing the pond at Koishikawa Korakuen",
+        igTag: "小石川後楽園紅葉",
+        ttQuery: "Koishikawa Korakuen autumn Tokyo",
+        cafes: [
+          "Canal Cafe (riverside deck cafe on the Kanda River moat in Iidabashi)",
+          "Biyori Kitchen inside the garden (soba noodles & autumn sweets)",
+          "Iidabashi Sakurabashi Coffee / Kagurazaka hideaway cafes (8 min walk)"
+        ],
+        attractions: [
+          "Engetsukyo ('Full Moon') stone arch bridge & Tsutenkyo red wooden bridge",
+          "Tokyo Dome City & LaQua Spa (right next door)",
+          "Kagurazaka cobblestone alleys & Zenkokuji Temple (10 min walk)"
+        ],
+        socialTip: "Frame the vermilion Tsutenkyo bridge surrounded by fiery maples with Tokyo Dome's white roof peeking behind."
+      },
+      {
+        id: "showa_kinen",
+        name: "Showa Kinen Park (Tachikawa)",
+        jp: "国営昭和記念公園",
+        tree: "both",
+        treeLabel: "2 Ginkgo Canals (300m) + Japanese Garden Maples",
+        rating: 4.8,
+        reviewCount: "16,700+ social & map reviews",
+        peak: "Nov 14 – Nov 29",
+        peakStart: "2026-11-14",
+        peakEnd: "2026-11-29",
+        colorProgress: "95% Full Peak (Canal & Katarai ginkgo tunnels in full gold + thick yellow leaf carpet)",
+        crowd: "High",
+        crowdScore: 86,
+        crowdNote: "Massive park (165 ha) keeps spaces open, though the Canal & Ginkgo avenues pack up on weekends.",
+        admission: "¥450 (Extra fee for evening Autumn Night Walk)",
+        free: false,
+        nightLight: true,
+        station: "Nishi-Tachikawa (2 min) / Tachikawa (10 min)",
+        x: 42, y: 165,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Katarai_no_Icho_Namiki_at_Showa_Kinen_Park_20161120.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Showa_Kinen_Park_201411.jpg?width=1000",
+        photoCaption: "300m Katarai no Icho Namiki ginkgo tunnel at Showa Kinen Park",
+        igTag: "昭和記念公園いちょう並木",
+        ttQuery: "Showa Kinen Park ginkgo autumn night walk",
+        cafes: [
+          "Oka Cafe (architectural timber cafe designed by Kengo Kuma inside the park)",
+          "Kansuitei Teahouse (matcha & wagashi inside the Japanese Garden)",
+          "Green Springs Tachikawa cafes (Paper Wall Cafe & R Baker just outside Akebono Gate)"
+        ],
+        attractions: [
+          "Katarai no Icho Namiki (300m tunnel of 98 ginkgos) + Canal Ginkgo Promenade",
+          "Japanese Garden Autumn Night Walk illumination (Nov 1 – Nov 29)",
+          "Sorano Hotel rooftop infinity water terrace at Green Springs"
+        ],
+        socialTip: "Rent a bicycle at Nishi-Tachikawa Gate to effortlessly link both ginkgo avenues and the Japanese garden."
+      },
+      {
+        id: "yoyogi_park",
+        name: "Yoyogi Park & Zelkova/Ginkgo Grove",
+        jp: "代々木公園",
+        tree: "both",
+        treeLabel: "Golden Ginkgo Forest + Crimson Maples",
+        rating: 4.6,
+        reviewCount: "24,100+ social & map reviews",
+        peak: "Nov 24 – Dec 7",
+        peakStart: "2026-11-24",
+        peakEnd: "2026-12-07",
+        colorProgress: "65% Golden/Amber (Zelkova trees bronze-gold; ginkgo grove peaking late Nov)",
+        crowd: "Moderate",
+        crowdScore: 65,
+        crowdNote: "Relaxed picnic vibe across wide lawns; liveliest on Sunday afternoons.",
+        admission: "Free",
+        free: true,
+        nightLight: false,
+        station: "Harajuku / Yoyogi-Koen / Meiji-Jingumae (3 min walk)",
+        x: 152, y: 228,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Yoyogi_Park_201411.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Autumn_leaves_at_Yoyogi_Park.jpg?width=1000",
+        photoCaption: "Golden autumn ginkgo and zelkova canopy inside Yoyogi Park",
+        igTag: "代々木公園紅葉",
+        ttQuery: "Yoyogi Park autumn leaves picnic Tokyo",
+        cafes: [
+          "Fuglen Tokyo (world-famous Norwegian espresso bar 4 min from West Gate)",
+          "Camelback Sandwich & Espresso (viral tamago sandwich + latte in Tomigaya)",
+          "Little Nap Coffee Stand (park-edge espresso counter)"
+        ],
+        attractions: [
+          "Meiji Jingu Shrine forested approach (adjacent)",
+          "Omotesando & Cat Street boutiques (8 min walk)",
+          "Yoyogi National Gymnasium (Kenzo Tange 1964 Olympic icon)"
+        ],
+        socialTip: "Grab takeaway coffee from Fuglen or Little Nap and spread a picnic mat under the yellow ginkgo grove."
+      },
+      {
+        id: "todoroki_valley",
+        name: "Todoroki Valley (Todoroki Keikoku)",
+        jp: "等々力渓谷",
+        tree: "maple",
+        treeLabel: "Ravine Maples & Bamboo Stream",
+        rating: 4.5,
+        reviewCount: "6,400+ social & map reviews",
+        peak: "Nov 25 – Dec 8",
+        peakStart: "2026-11-25",
+        peakEnd: "2026-12-08",
+        colorProgress: "55% Turning Red (Sheltered ravine warms slowly; peaks late Nov – early Dec)",
+        crowd: "Low",
+        crowdScore: 42,
+        crowdNote: "Tranquil hidden gorge in Setagaya; peaceful even on autumn weekends.",
+        admission: "Free",
+        free: true,
+        nightLight: false,
+        station: "Todoroki Station (Tokyu Oimachi Line, 3 min walk)",
+        x: 138, y: 348,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Todoroki_Valley_201311.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Todoroki_Ravine_Tokyo.jpg?width=1000",
+        photoCaption: "Autumn maple foliage arching over the Yazawa River in Todoroki Valley",
+        igTag: "等々力渓谷紅葉",
+        ttQuery: "Todoroki Valley Tokyo autumn hidden gem",
+        cafes: [
+          "Setsugekka Sweet Shop (historic riverside teahouse serving kuzumochi & matcha)",
+          "Mountain Hut / Oimachi-line artisan cafes near Todoroki & Oyamadai",
+          "Jiyugaoka sweets & canal-side cafes (2 stops away on Oimachi Line)"
+        ],
+        attractions: [
+          "Golf Bridge (iconic red steel bridge framed by autumn leaves)",
+          "Todoroki Fudoson Temple hillside wooden viewing deck",
+          "Futako-Tamagawa Rise riverside terraces (2 stops west)"
+        ],
+        socialTip: "Check Setagaya Ward trail notices before visiting, as occasional tree-maintenance sections close briefly."
+      },
+      {
+        id: "hama_rikyu",
+        name: "Hama-rikyu Gardens",
+        jp: "浜離宮恩賜庭園",
+        tree: "maple",
+        treeLabel: "Seawater Pond Maples & Peony Garden",
+        rating: 4.7,
+        reviewCount: "13,900+ social & map reviews",
+        peak: "Nov 22 – Dec 5",
+        peakStart: "2026-11-22",
+        peakEnd: "2026-12-05",
+        colorProgress: "70% Crimson & Gold (Haze-no-ki wax trees bright red; maples nearing peak)",
+        crowd: "Low",
+        crowdScore: 48,
+        crowdNote: "Serene Edo daimyo garden with skyline reflections and low tourist density.",
+        admission: "¥300",
+        free: false,
+        nightLight: false,
+        station: "Shiodome / Tsukijishijo (7 min walk)",
+        x: 336, y: 284,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Hama-rikyu_Gardens_201411.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Hamarikyu_Gardens_Tokyo_autumn.jpg?width=1000",
+        photoCaption: "Autumn foliage along tidal Shioiri Pond at Hama-rikyu Gardens",
+        igTag: "浜離宮恩賜庭園紅葉",
+        ttQuery: "Hama rikyu gardens autumn Tokyo",
+        cafes: [
+          "Nakajima no Ochaya (floating wooden teahouse over Shioiri Pond serving matcha + wagashi)",
+          "Turret Coffee Tsukiji (latte art & dorayaki pairings 10 min walk)",
+          "Caretta Shiodome 46F sky cafes & winter illumination (next door)"
+        ],
+        attractions: [
+          "300-Year-Old Pine & tidal Shioiri-no-ike Pond",
+          "Tsukiji Outer Market street-food breakfast (10 min walk)",
+          "Tokyo Water Bus cruise departure pier to Asakusa"
+        ],
+        socialTip: "Sip matcha on the tatami veranda of Nakajima-no-Ochaya while crimson maples reflect against Shiodome skyscrapers."
+      },
+      {
+        id: "shiba_park",
+        name: "Shiba Park & Zojoji Temple (Momiji Valley)",
+        jp: "芝公園・増上寺 もみじ谷",
+        tree: "both",
+        treeLabel: "Maple Waterfall + Ginkgo Backdrop to Tokyo Tower",
+        rating: 4.7,
+        reviewCount: "11,600+ social & map reviews",
+        peak: "Nov 24 – Dec 7",
+        peakStart: "2026-11-24",
+        peakEnd: "2026-12-07",
+        colorProgress: "65% Turning Gold/Red (Momiji Valley maples & Zojoji ginkgos peaking late Nov)",
+        crowd: "Moderate",
+        crowdScore: 62,
+        crowdNote: "Spread across multiple park zones; Momiji Valley waterfall stays surprisingly quiet.",
+        admission: "Free",
+        free: true,
+        nightLight: true,
+        station: "Shibakoen / Onarimon / Akabanebashi (3 min walk)",
+        x: 274, y: 288,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zojoji_Temple_and_Tokyo_Tower_201411.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Shiba_Park_Tokyo_Tower_autumn.jpg?width=1000",
+        photoCaption: "Zojoji Temple & Tokyo Tower framed by golden ginkgos and red maples",
+        igTag: "芝公園紅葉",
+        ttQuery: "Shiba Park Tokyo Tower autumn leaves",
+        cafes: [
+          "Le Pain Quotidien Shiba Park (European bakery terrace right below Tokyo Tower)",
+          "Terrace Dining TANGO (lush garden patio facing Tokyo Tower)",
+          "LIT COFFEE & TEA STAND (specialty coffee & seasonal pudding near Shiba)"
+        ],
+        attractions: [
+          "Zojoji Temple Main Hall & Jizo statues with autumn foliage",
+          "Tokyo Tower Main Deck & FootTown (5 min walk)",
+          "Azabudai Hills Christmas & Cartier Tree (12 min walk north)"
+        ],
+        socialTip: "Visit at sunset: Tokyo Tower's warm orange lights illuminate the surrounding red maples and yellow ginkgos for free."
+      },
+      {
+        id: "ueno_park",
+        name: "Ueno Onshi Park & Tokyo National Museum",
+        jp: "上野恩賜公園",
+        tree: "both",
+        treeLabel: "Monumental Ginkgos + Shinobazu Maples",
+        rating: 4.6,
+        reviewCount: "28,900+ social & map reviews",
+        peak: "Nov 22 – Dec 5",
+        peakStart: "2026-11-22",
+        peakEnd: "2026-12-05",
+        colorProgress: "72% Golden & Scarlet (Museum plaza ginkgos glowing yellow; pond maples turning)",
+        crowd: "High",
+        crowdScore: 80,
+        crowdNote: "Wide museum boulevards handle crowds easily; quieter inside Tokyo National Museum's rear garden.",
+        admission: "Free (Museum Garden ¥1,000)",
+        free: true,
+        nightLight: false,
+        station: "JR Ueno Station (Park Exit, 2 min walk)",
+        x: 332, y: 122,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Ueno_Park_201411.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Tokyo_National_Museum_and_ginkgo_tree.jpg?width=1000",
+        photoCaption: "Towering golden ginkgo trees lining Ueno Onshi Park",
+        igTag: "上野公園紅葉",
+        ttQuery: "Ueno Park autumn ginkgo Tokyo",
+        cafes: [
+          "Park Side Cafe (glasshouse terrace surrounded by Ueno's yellow ginkgos)",
+          "Starbucks Ueno Onshi Park (popular foliage-viewing plaza seats)",
+          "Kayaba Coffee in Yanaka (historic 1938 kissaten famous for egg sandwiches, 12 min walk)"
+        ],
+        attractions: [
+          "Tokyo National Museum (rear garden opens specially in autumn)",
+          "Kiyomizu Kannon-do Temple & Shinobazu Pond",
+          "Ameyoko Market & Yanaka Ginza retro shopping street"
+        ],
+        socialTip: "Don't miss the massive 100-year-old ginkgo tree in front of the Tokyo National Museum Hyokeikan."
+      },
+      {
+        id: "hibiya_park",
+        name: "Hibiya Park & S-Curve Ginkgo Avenue",
+        jp: "日比谷公園",
+        tree: "both",
+        treeLabel: "S-Shaped Ginkgo Avenue + Crane Fountain Maples",
+        rating: 4.5,
+        reviewCount: "8,300+ social & map reviews",
+        peak: "Nov 23 – Dec 6",
+        peakStart: "2026-11-23",
+        peakEnd: "2026-12-06",
+        colorProgress: "68% Yellow/Crimson (S-curve ginkgos turning golden; Kumogata pond maples red)",
+        crowd: "Low",
+        crowdScore: 45,
+        crowdNote: "Calm central oasis favored by Tokyo office workers and photographers.",
+        admission: "Free",
+        free: true,
+        nightLight: true,
+        station: "Hibiya / Kasumigaseki (1 min walk)",
+        x: 294, y: 238,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Hibiya_Park_autumn_2014.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Kumogata-ike_Pond_Hibiya_Park.jpg?width=1000",
+        photoCaption: "Crane Fountain & scarlet maple reflections at Kumogata-ike Pond",
+        igTag: "日比谷公園紅葉",
+        ttQuery: "Hibiya Park autumn ginkgo Tokyo",
+        cafes: [
+          "Matsumotoro Grill & Garden Terrace (founded 1903, next to the giant 'Neck-Risking' ginkgo)",
+          "Hibiya Saroh (open-air garden cafe under the trees)",
+          "Buvette Tokyo inside Tokyo Midtown Hibiya (across the street)"
+        ],
+        attractions: [
+          "Kumogata-ike Pond & Crane Fountain surrounded by scarlet maples",
+          "Tokyo Midtown Hibiya Magic Time Illumination (evening)",
+          "Imperial Palace East Gardens & Ninomaru Grove (10 min walk)"
+        ],
+        socialTip: "Combine late-afternoon foliage in Hibiya Park with the 16:00 Hibiya & Marunouchi illuminations right across the road."
+      },
+      {
+        id: "mount_takao",
+        name: "Mount Takao (Takaosan)",
+        jp: "高尾山",
+        tree: "maple",
+        treeLabel: "Mountain Momiji Canopy & Cable Car Tunnel",
+        rating: 4.8,
+        reviewCount: "22,400+ social & map reviews",
+        peak: "Nov 10 – Nov 23",
+        peakStart: "2026-11-10",
+        peakEnd: "2026-11-23",
+        colorProgress: "100% Full Mountain Peak Now (Summit & Yakuoin in peak red; transitions past peak after Nov 24)",
+        crowd: "High",
+        crowdScore: 92,
+        crowdNote: "Early-season hotspot! Cable car queues reach 45–60 min on weekends; take Trail 1 or 6 up before 08:30.",
+        admission: "Free (Cable car ¥490 one-way)",
+        free: true,
+        nightLight: false,
+        station: "Takaosanguchi Station (Keio Line, 50 min from Shinjuku)",
+        x: 22, y: 255,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Takao_autumn_leaves.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Takaosan_momiji_autumn.jpg?width=1000",
+        photoCaption: "Vibrant crimson momiji framing Mount Takao's mountain trails",
+        igTag: "高尾山紅葉",
+        ttQuery: "Mount Takao autumn foliage cable car Tokyo",
+        cafes: [
+          "Takaosan Sumika (mountain-top terrace serving tengu-yaki black bean pastries & coffee)",
+          "Takao 599 Museum Cafe (bright minimalist wood cafe at the base)",
+          "Juicery by Cosme Kitchen / warm tororo soba houses along the approach"
+        ],
+        attractions: [
+          "Yakuoin Temple mountain sanctuary & red maple gates",
+          "Mt. Fuji clear-morning panorama from the 599m summit",
+          "Keio Takaosan Onsen Gokurakuyu hot spring right at the station"
+        ],
+        socialTip: "Best spot if you are visiting Tokyo right now or before Nov 23—high elevation means it peaks earliest."
+      },
+      {
+        id: "kamakura_hasedera",
+        name: "Kamakura Hasedera Temple & Momiji Light-Up",
+        jp: "長谷寺（鎌倉）紅葉ライトアップ",
+        tree: "both",
+        treeLabel: "Hillside Crimson Maples + Golden Ginkgo",
+        rating: 4.8,
+        reviewCount: "19,300+ social & map reviews",
+        peak: "Nov 23 – Dec 9",
+        peakStart: "2026-11-23",
+        peakEnd: "2026-12-09",
+        colorProgress: "62% Turning Scarlet/Gold (Coastal Kamakura warms later; peaks late Nov – early Dec)",
+        crowd: "High",
+        crowdScore: 85,
+        crowdNote: "Popular Kamakura highlight; evening autumn illumination (late Nov – early Dec, sunset–19:30) offers magical pond reflections.",
+        admission: "¥400",
+        free: false,
+        nightLight: true,
+        station: "Hase Station (Enoden Line, 5 min walk • ~60 min from Tokyo)",
+        x: 72, y: 344,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Hasedera_Kamakura_autumn_2014.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Hasedera_Temple_Kamakura_2016.jpg?width=1000",
+        photoCaption: "Scarlet Japanese maples reflecting in Hasedera's lower koi pond in Kamakura",
+        igTag: "長谷寺紅葉",
+        ttQuery: "Hasedera Kamakura autumn illumination",
+        cafes: [
+          "Kaikoan (panoramic ocean-view restaurant inside Hasedera serving temple curry & sweet dango)",
+          "Cafe Luonto (cozy Scandinavian-style coffee & cake house 3 min from Hase Station)",
+          "Kannon Coffee Kamakura (viral Great Buddha crepe & specialty latte on Hase approach)"
+        ],
+        attractions: [
+          "Kotoku-in Great Buddha of Kamakura (Daibutsu, 8 min walk)",
+          "Yuigahama Beach sunset coastline (8 min walk south)",
+          "Enoden retro coastal tram ride to Enoshima Island"
+        ],
+        socialTip: "Kamakura is ~1 hour south of Tokyo via JR Yokosuka Line + Enoden tram; coastal climate keeps maples vibrant into early December."
+      },
+      {
+        id: "kamakura_meigetsuin",
+        name: "Kamakura Meigetsuin (Round Window Maples)",
+        jp: "明月院（鎌倉）悟りの窓",
+        tree: "maple",
+        treeLabel: "Framed Inner-Garden Scarlet Maples",
+        rating: 4.7,
+        reviewCount: "12,100+ social & map reviews",
+        peak: "Nov 24 – Dec 10",
+        peakStart: "2026-11-24",
+        peakEnd: "2026-12-10",
+        colorProgress: "58% Turning Red (Inner sanctuary maples peak late Nov through first week of Dec)",
+        crowd: "Moderate",
+        crowdScore: 72,
+        crowdNote: "10–20 min photo queue for the iconic circular 'Window of Enlightenment' at midday; arrive at 09:00 opening.",
+        admission: "¥500 (+¥500 Inner Garden in peak autumn)",
+        free: false,
+        nightLight: false,
+        station: "JR Kita-Kamakura Station (10 min walk • ~50 min from Tokyo)",
+        x: 112, y: 314,
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Meigetsuin_Window_of_Enlightenment.jpg?width=1000",
+        photoBackup: "https://commons.wikimedia.org/wiki/Special:FilePath/Meigetsuin_Kamakura_autumn.jpg?width=1000",
+        photoCaption: "Meigetsuin's circular 'Window of Enlightenment' framing crimson autumn foliage",
+        igTag: "明月院悟りの窓",
+        ttQuery: "Meigetsuin Kamakura round window autumn",
+        cafes: [
+          "Gekkoan (tranquil matcha & wagashi teahouse tucked inside Meigetsuin's bamboo grove)",
+          "Kitakamakura Kominka Cafe Ishikawaya (traditional wooden house sweets & coffee)",
+          "VERVE COFFEE ROASTERS Kitakamakura / Kamakura (California-born specialty pour-over)"
+        ],
+        attractions: [
+          "Engaku-ji & Kencho-ji Zen temple complexes (5–12 min walk along Kita-Kamakura)",
+          "Tsurugaoka Hachimangu Shrine & Komachi-dori street food (1 stop or 20 min walk)",
+          "Hokokuji Bamboo Forest Temple (short bus/taxi east of Kamakura Station)"
+        ],
+        socialTip: "Start your Kamakura day trip at Kita-Kamakura (Meigetsuin & Engaku-ji) at 09:00, then ride the Enoden to Hasedera for sunset light-up."
+      }
+    ];
+
+    let treeFilter = "all";
+    let crowdFilter = "all";
+    let statusFilter = "all";
+    let highlightedId = null;
+    let savedIds = ["jingu_gaien", "rikugien", "shinjuku_gyoen"];
+
+    function getFoliageStatus(spot, checkDate) {
+      if (checkDate < spot.peakStart) {
+        return {
+          code: "approaching",
+          label: "🌱 Approaching Peak",
+          shortLabel: "Approaching",
+          badgeClass: "bg-emerald-500/20 text-emerald-300 border-emerald-400/40",
+          order: 2
+        };
+      }
+      if (checkDate <= spot.peakEnd) {
+        return {
+          code: "peak",
+          label: "🔥 At Peak Colors",
+          shortLabel: "At Peak",
+          badgeClass: "bg-amber-400/25 text-amber-200 border-amber-400/60",
+          order: 1
+        };
+      }
+      return {
+        code: "past",
+        label: "🍂 Past Peak (Fallen Leaf Carpet)",
+        shortLabel: "Past Peak",
+        badgeClass: "bg-stone-700/70 text-stone-300 border-stone-500/40",
+        order: 3
+      };
+    }
+
+    function updateFilterChips() {
+      document.querySelectorAll("#statusFilters .filter-chip").forEach(btn => {
+        const active = btn.dataset.status === statusFilter;
+        btn.className = active
+          ? "filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-400 bg-amber-400/20 text-amber-200 transition"
+          : "filter-chip px-3 py-1.5 rounded-full text-xs font-semibold border border-stone-600/40 bg-stone-900/70 text-stone-400 hover:text-white transition";
+      });
+
+      document.querySelectorAll("#treeFilters .filter-chip").forEach(btn => {
+        const active = btn.dataset.tree === treeFilter;
+        btn.className = active
+          ? "filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border border-amber-400 bg-amber-400/20 text-amber-200 transition"
+          : "filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border border-stone-600/40 bg-stone-900/70 text-stone-400 hover:text-white transition";
+      });
+
+      document.querySelectorAll("#crowdFilters .filter-chip").forEach(btn => {
+        const active = btn.dataset.crowd === crowdFilter;
+        btn.className = active
+          ? "filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border border-amber-400 bg-amber-400/20 text-amber-200 transition"
+          : "filter-chip px-3.5 py-1.5 rounded-full text-xs font-semibold border border-stone-600/40 bg-stone-900/70 text-stone-400 hover:text-white transition";
+      });
+    }
+
+    function setStatusFilter(val) {
+      statusFilter = val;
+      updateFilterChips();
+      renderAll();
+    }
+
+    function setTreeFilter(val) {
+      treeFilter = val;
+      updateFilterChips();
+      renderAll();
+    }
+
+    function setCrowdFilter(val) {
+      crowdFilter = val;
+      updateFilterChips();
+      renderAll();
+    }
+
+    function resetFilters() {
+      treeFilter = "all";
+      crowdFilter = "all";
+      statusFilter = "all";
+      highlightedId = null;
+      document.getElementById("checkDateSelect").value = "2026-11-18";
+      document.getElementById("nightOnlyToggle").checked = false;
+      document.getElementById("freeOnlyToggle").checked = false;
+      document.getElementById("sortSelect").value = "rating";
+      document.getElementById("searchInput").value = "";
+      updateFilterChips();
+      renderAll();
+    }
+
+    function getFilteredSpots() {
+      const checkDate = document.getElementById("checkDateSelect").value;
+      const nightOnly = document.getElementById("nightOnlyToggle").checked;
+      const freeOnly = document.getElementById("freeOnlyToggle").checked;
+      const sortBy = document.getElementById("sortSelect").value;
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      const list = SPOTS.filter(s => {
+        const st = getFoliageStatus(s, checkDate);
+        if (statusFilter !== "all" && st.code !== statusFilter) return false;
+        if (treeFilter !== "all" && s.tree !== treeFilter) return false;
+        if (crowdFilter !== "all" && s.crowd !== crowdFilter) return false;
+        if (nightOnly && !s.nightLight) return false;
+        if (freeOnly && !s.free) return false;
+        if (q) {
+          const blob = `${s.name} ${s.jp} ${s.treeLabel} ${s.station} ${s.cafes.join(" ")} ${s.attractions.join(" ")} ${s.socialTip}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+
+      list.sort((a, b) => {
+        if (sortBy === "status") {
+          const stA = getFoliageStatus(a, checkDate).order;
+          const stB = getFoliageStatus(b, checkDate).order;
+          if (stA !== stB) return stA - stB;
+          return b.rating - a.rating;
+        }
+        if (sortBy === "crowdAsc") {
+          return a.crowdScore - b.crowdScore;
+        }
+        return b.rating - a.rating;
+      });
+
+      return list;
+    }
+
+    function renderCrowdChart(filteredIds, checkDate) {
+      const box = document.getElementById("crowdChart");
+      box.innerHTML = SPOTS.map(s => {
+        const active = filteredIds.has(s.id);
+        const st = getFoliageStatus(s, checkDate);
+        const barColor = s.crowd === "High"
+          ? "from-rose-500 to-orange-500"
+          : (s.crowd === "Moderate" ? "from-amber-400 to-yellow-500" : "from-emerald-400 to-teal-500");
+        const icon = s.tree === "ginkgo" ? "🟡" : (s.tree === "maple" ? "🍁" : "🍂");
+
+        return `
+          <div onclick="focusSpot('${s.id}')"
+            style="opacity: ${active ? 1 : 0.28};"
+            class="p-2.5 rounded-xl bg-stone-900/75 border border-stone-700/40 hover:border-amber-400/50 cursor-pointer transition">
+            <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
+              <div class="font-bold text-stone-100 truncate">
+                ${icon} ${s.name} <span class="text-amber-300 font-semibold ml-1">★ ${s.rating.toFixed(1)}</span>
+              </div>
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${st.badgeClass}">${st.shortLabel}</span>
+                <span class="font-mono-tech text-[10px] text-stone-400">${s.crowd} (${s.crowdScore}%)</span>
+              </div>
+            </div>
+            <div class="w-full h-2 bg-stone-800 rounded-full overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r ${barColor}" style="width: ${s.crowdScore}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderMap(filteredIds) {
+      const svg = document.getElementById("foliageMap");
+      let content = `
+        <defs>
+          <filter id="leafGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Tokyo Bay -->
+        <path d="M 355 240 Q 395 280 420 390 L 500 390 L 500 210 Z" fill="rgba(56, 189, 248, 0.08)" />
+        <text x="415" y="335" fill="#44403c" font-size="11" font-weight="700">TOKYO BAY</text>
+
+        <!-- Kamakura & Sagami Bay Day-Trip Inset Zone -->
+        <rect x="14" y="282" width="224" height="78" rx="12" fill="rgba(14, 165, 233, 0.07)" stroke="rgba(56, 189, 248, 0.35)" stroke-width="1.2" stroke-dasharray="4 3" />
+        <text x="24" y="297" fill="#7dd3fc" font-size="9.5" font-weight="800" letter-spacing="0.06em">KAMAKURA DAY-TRIP ZONE (~55m JR)</text>
+        <text x="172" y="352" fill="#38bdf8" opacity="0.45" font-size="8.5" font-weight="700">SAGAMI BAY</text>
+
+        <!-- Yamanote Loop Reference -->
+        <ellipse cx="235" cy="192" rx="105" ry="112" fill="none" stroke="rgba(251, 191, 36, 0.2)" stroke-width="2.5" stroke-dasharray="6 5" />
+        <text x="195" y="100" fill="#57534e" font-size="10" font-weight="700">JR YAMANOTE LOOP</text>
+
+        <!-- Chuo / Keio Westward Line to Tachikawa & Mt. Takao -->
+        <path d="M 22 255 L 42 165 L 145 185 L 294 238" fill="none" stroke="rgba(249, 115, 22, 0.22)" stroke-width="2" stroke-dasharray="4 4" />
+
+        <!-- JR Yokosuka / Enoden Southbound Line to Kamakura -->
+        <path d="M 294 238 L 274 274 L 112 314 L 72 344" fill="none" stroke="rgba(56, 189, 248, 0.45)" stroke-width="2" stroke-dasharray="4 4" />
+      `;
+
+      SPOTS.forEach(s => {
+        const active = filteredIds.has(s.id);
+        const isSelected = highlightedId === s.id;
+        const color = s.tree === "ginkgo" ? "#fbbf24" : (s.tree === "maple" ? "#f43f5e" : "#fb923c");
+        const isKamakura = s.id.startsWith("kamakura_");
+        const shortLabel = isKamakura
+          ? s.name.replace("Kamakura ", "").split(" ")[0] + (s.id === "kamakura_hasedera" ? " (Enoden)" : " (Kita-Kamakura)")
+          : s.name.split(" ")[0] + (s.name.split(" ")[1] ? " " + s.name.split(" ")[1] : "");
+
+        content += `
+          <g class="map-node" style="opacity: ${active ? 1 : 0.22};" onclick="focusSpot('${s.id}')">
+            ${isSelected ? `<circle cx="${s.x}" cy="${s.y}" r="16" fill="none" stroke="#fde047" stroke-width="2" />` : ""}
+            <circle cx="${s.x}" cy="${s.y}" r="11" fill="${color}" opacity="0.28" filter="url(#leafGlow)" />
+            <circle class="core" cx="${s.x}" cy="${s.y}" r="6" fill="${isSelected ? '#ffffff' : color}" stroke="#0c0a09" stroke-width="1.5" />
+            <text x="${s.x + 9}" y="${s.y + 4}" fill="${isSelected ? '#fde047' : (isKamakura ? '#bae6fd' : '#f5f5f4')}" font-size="10" font-weight="700">${shortLabel}</text>
+          </g>
+        `;
+      });
+
+      svg.innerHTML = content;
+    }
+
+    function getSocialLinks(s) {
+      return {
+        ig: `https://www.instagram.com/explore/tags/${encodeURIComponent(s.igTag)}/`,
+        tt: `https://www.tiktok.com/search?q=${encodeURIComponent(s.ttQuery)}`
+      };
+    }
+
+    function openLightbox(id) {
+      const s = SPOTS.find(x => x.id === id);
+      if (!s) return;
+      const checkDate = document.getElementById("checkDateSelect").value;
+      const st = getFoliageStatus(s, checkDate);
+      const links = getSocialLinks(s);
+      const cardImg = document.querySelector(`#spot-${s.id} img`);
+      const lbImg = document.getElementById("lightboxImg");
+      lbImg.src = (cardImg && cardImg.currentSrc) ? cardImg.currentSrc : s.photo;
+      lbImg.onerror = function() {
+        if (!this.dataset.triedBackup && s.photoBackup) {
+          this.dataset.triedBackup = "1";
+          this.src = s.photoBackup;
+        }
+      };
+      document.getElementById("lightboxStatusPill").innerHTML = `<span class="text-xs font-bold px-3 py-1 rounded-full border backdrop-blur-md bg-stone-950/85 ${st.badgeClass}">${st.label}</span>`;
+      document.getElementById("lightboxTitle").textContent = `${s.name} (${s.jp})`;
+      document.getElementById("lightboxRating").textContent = `★ ${s.rating.toFixed(1)} / 5.0 (${s.reviewCount})`;
+      document.getElementById("lightboxSub").textContent = `${s.photoCaption} • Peak: ${s.peak} • ${s.station}`;
+      document.getElementById("lightboxIg").href = links.ig;
+      document.getElementById("lightboxTt").href = links.tt;
+      const lb = document.getElementById("lightbox");
+      lb.classList.remove("hidden");
+      lb.classList.add("flex");
+    }
+
+    function handleSpotImgError(imgEl) {
+      if (!imgEl.dataset.triedBackup && imgEl.dataset.backup) {
+        imgEl.dataset.triedBackup = "1";
+        imgEl.src = imgEl.dataset.backup;
+        return;
+      }
+      if (!imgEl.dataset.failed) {
+        imgEl.dataset.failed = "1";
+        imgEl.src = imgEl.dataset.fallback;
+      }
+    }
+
+    function closeLightbox(e) {
+      if (!e || e.target.id === "lightbox") {
+        const lb = document.getElementById("lightbox");
+        lb.classList.add("hidden");
+        lb.classList.remove("flex");
+      }
+    }
+
+    function renderCards(filtered, checkDate) {
+      const grid = document.getElementById("spotsGrid");
+      document.getElementById("kpiCount").textContent = filtered.length;
+
+      const atPeakCount = SPOTS.filter(s => getFoliageStatus(s, checkDate).code === "peak").length;
+      const approachingCount = SPOTS.filter(s => getFoliageStatus(s, checkDate).code === "approaching").length;
+      const dateText = document.getElementById("checkDateSelect").selectedOptions[0].text.split("(")[0].trim();
+      document.getElementById("kpiAtPeak").textContent = `${atPeakCount} Spots`;
+      document.getElementById("kpiApproaching").textContent = `${approachingCount} Spots`;
+      document.getElementById("kpiStatusLabel").textContent = `Status on ${dateText}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="glass-panel rounded-2xl p-8 col-span-full text-center text-stone-400">
+            No foliage spots match your filters. Click <strong class="text-amber-300">Reset Filters</strong> above.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(s => {
+        const isSaved = savedIds.includes(s.id);
+        const isHighlighted = highlightedId === s.id;
+        const st = getFoliageStatus(s, checkDate);
+        const links = getSocialLinks(s);
+
+        let treeBadge = `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-400/35">🍂 Ginkgo + Maple</span>`;
+        if (s.tree === "ginkgo") {
+          treeBadge = `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">🟡 Golden Ginkgo</span>`;
+        } else if (s.tree === "maple") {
+          treeBadge = `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/40">🍁 Crimson Maple</span>`;
+        }
+
+        const crowdBadge = s.crowd === "High"
+          ? `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300">🔴 High Crowd</span>`
+          : (s.crowd === "Moderate"
+            ? `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300">🟡 Moderate Crowd</span>`
+            : `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">🟢 Low Crowd</span>`);
+
+        const fallbackSvg = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c2d12"/><stop offset="50%" stop-color="#451a03"/><stop offset="100%" stop-color="#1c1917"/></linearGradient></defs><rect width="800" height="420" fill="url(#g)"/><circle cx="160" cy="110" r="95" fill="#f59e0b" opacity="0.22"/><circle cx="640" cy="290" r="120" fill="#e11d48" opacity="0.22"/><text x="400" y="195" fill="#fde68a" font-family="sans-serif" font-size="22" font-weight="bold" text-anchor="middle">${s.name}</text><text x="400" y="230" fill="#fdba74" font-family="sans-serif" font-size="14" text-anchor="middle">${s.treeLabel} • Peak: ${s.peak}</text></svg>`
+        );
+
+        return `
+          <article id="spot-${s.id}" class="spot-card rounded-2xl overflow-hidden flex flex-col justify-between ${isHighlighted ? 'highlighted' : ''}">
+            <!-- Photo Header with Live Status & Rating Pill -->
+            <div onclick="openLightbox('${s.id}')" class="relative h-52 w-full bg-stone-950 overflow-hidden cursor-zoom-in">
+              <img src="${s.photo}" alt="${s.name}" loading="lazy"
+                data-backup="${s.photoBackup || ''}"
+                data-fallback="${fallbackSvg}"
+                onerror="handleSpotImgError(this)"
+                class="w-full h-full object-cover block" />
+              <div class="absolute inset-0 pointer-events-none"
+                style="background: linear-gradient(to top, rgba(12, 10, 9, 0.95) 4%, rgba(12, 10, 9, 0.12) 55%, rgba(12, 10, 9, 0.45) 100%);"></div>
+
+              <!-- Top Overlay: Peak Status Badge & Star Rating -->
+              <div class="absolute top-2.5 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none">
+                <span class="text-[11px] font-extrabold px-2.5 py-1 rounded-full border backdrop-blur-md bg-stone-950/85 ${st.badgeClass}">
+                  ${st.label}
+                </span>
+                <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-stone-950/85 border border-amber-400/45 text-amber-300 backdrop-blur-md">
+                  ★ ${s.rating.toFixed(1)} <span class="text-[10px] font-normal text-stone-300">/ 5.0</span>
+                </span>
+              </div>
+
+              <!-- Bottom Overlay: Zoom & Social Buttons -->
+              <div onclick="event.stopPropagation()"
+                class="absolute bottom-2.5 left-3 right-3 flex items-center justify-between gap-2 text-xs">
+                <span onclick="openLightbox('${s.id}')"
+                  class="px-2 py-1 rounded-md bg-stone-950/85 border border-white/15 text-stone-200 cursor-pointer hover:border-amber-400/50 text-[11px] font-medium">
+                  🔍 Enlarge Photo
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <a href="${links.ig}" target="_blank" rel="noopener"
+                    class="px-2 py-1 rounded-md bg-stone-900/90 border border-white/20 hover:border-amber-400 text-white hover:text-amber-300 text-[11px] font-bold transition">
+                    📸 IG Tag
+                  </a>
+                  <a href="${links.tt}" target="_blank" rel="noopener"
+                    class="px-2 py-1 rounded-md bg-stone-900/90 border border-white/20 hover:border-amber-400 text-white hover:text-amber-300 text-[11px] font-bold transition">
+                    🎵 TikTok
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Body -->
+            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3.5">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <div>
+                    <div class="flex flex-wrap gap-1.5 mb-2">
+                      ${treeBadge}
+                      ${crowdBadge}
+                      ${s.nightLight ? `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/35">🌙 Night Light-Up</span>` : ""}
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-white leading-snug">${s.name}</h3>
+                    <div class="text-xs text-stone-400 mt-0.5">${s.jp} • <span class="text-amber-300 font-semibold">${s.treeLabel}</span></div>
+                    <div class="text-[11px] text-stone-400 mt-0.5">Rated <strong class="text-amber-300">★ ${s.rating.toFixed(1)}</strong> (${s.reviewCount})</div>
+                  </div>
+                  <button type="button" onclick="toggleSaved('${s.id}')" title="Save to Foliage & Cafe List"
+                    class="w-9 h-9 rounded-xl border flex items-center justify-center text-base flex-shrink-0 transition ${
+                      isSaved
+                        ? 'bg-amber-400/20 border-amber-400 text-amber-300'
+                        : 'bg-stone-800/90 border-stone-600/40 text-stone-400 hover:text-amber-300'
+                    }">
+                    ${isSaved ? '★' : '☆'}
+                  </button>
+                </div>
+
+                <!-- Key Logistics & Foliage Color Progress -->
+                <div class="grid gap-1 text-xs text-stone-300 bg-stone-950/65 p-3 rounded-xl border border-amber-400/10 mb-3">
+                  <div><strong class="text-stone-100">Foliage Progress:</strong> <span class="text-amber-200">${s.colorProgress}</span></div>
+                  <div><strong class="text-stone-100">Peak Window:</strong> <span class="font-mono-tech text-amber-300">${s.peak}</span> • <strong>Entry:</strong> ${s.admission}</div>
+                  <div><strong class="text-stone-100">Access:</strong> ${s.station}</div>
+                  <div><strong class="text-stone-100">Crowd Intel:</strong> ${s.crowdNote}</div>
+                </div>
+
+                <!-- Cafes Surrounding Area -->
+                <div class="mb-3">
+                  <div class="text-xs font-bold uppercase tracking-wider text-amber-300 mb-1">☕ Good Surrounding Cafes</div>
+                  <ul class="list-disc list-inside space-y-1 text-xs text-stone-300">
+                    ${s.cafes.map(c => `<li>${c}</li>`).join("")}
+                  </ul>
+                </div>
+
+                <!-- Nearby Attractions -->
+                <div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-rose-300 mb-1">🏛️ Nearby Attractions</div>
+                  <ul class="list-disc list-inside space-y-1 text-xs text-stone-300">
+                    ${s.attractions.map(a => `<li>${a}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Social Media Tip Footer -->
+              <div class="text-xs text-amber-200 bg-amber-500/10 border border-amber-400/25 rounded-xl p-2.5">
+                <strong>💡 Social Pulse Tip:</strong> ${s.socialTip}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderSaved() {
+      const box = document.getElementById("savedList");
+      document.getElementById("savedCount").textContent = savedIds.length;
+      if (savedIds.length === 0) {
+        box.innerHTML = `<span class="text-xs text-stone-500">No spots saved yet. Click ☆ on any card below to add it.</span>`;
+        return;
+      }
+      box.innerHTML = savedIds.map((id, idx) => {
+        const s = SPOTS.find(x => x.id === id);
+        if (!s) return "";
+        return `
+          <div class="inline-flex items-center gap-2 bg-stone-900/95 border border-amber-400/40 px-3 py-1.5 rounded-xl text-xs">
+            <strong class="text-amber-400 font-mono-tech">#${idx + 1}</strong>
+            <span class="text-white font-semibold">${s.name}</span>
+            <span class="text-stone-400 hidden sm:inline">• ☕ ${s.cafes[0].split("(")[0].trim()}</span>
+            <button type="button" onclick="toggleSaved('${id}')" class="text-rose-400 hover:text-rose-300 font-bold ml-1">✕</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleSaved(id) {
+      if (savedIds.includes(id)) {
+        savedIds = savedIds.filter(x => x !== id);
+      } else {
+        savedIds.push(id);
+      }
+      renderAll();
+    }
+
+    function clearSaved() {
+      savedIds = [];
+      renderAll();
+    }
+
+    function focusSpot(id) {
+      highlightedId = id;
+      renderAll();
+      const el = document.getElementById("spot-" + id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function copyPlan() {
+      if (savedIds.length === 0) {
+        showToast("Star at least 1 foliage spot first!");
+        return;
+      }
+      const lines = savedIds.map((id, i) => {
+        const s = SPOTS.find(x => x.id === id);
+        return `${i + 1}. ${s.name} (${s.treeLabel} | Peak: ${s.peak})\n   - Station: ${s.station} | Crowd: ${s.crowd}\n   - Top Cafe: ${s.cafes[0]}\n   - Nearby: ${s.attractions[0]}`;
+      });
+      const text = "Tokyo Autumn Ginkgo & Maple + Cafe Hopping Plan:\n\n" + lines.join("\n\n");
+
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("Copied foliage & cafe plan to clipboard!");
+      } catch (err) {
+        showToast("Plan ready!");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.remove("opacity-0", "translate-y-4");
+      t.classList.add("opacity-100", "translate-y-0");
+      setTimeout(() => {
+        t.classList.add("opacity-0", "translate-y-4");
+        t.classList.remove("opacity-100", "translate-y-0");
+      }, 2500);
+    }
+
+    function renderAll() {
+      const checkDate = document.getElementById("checkDateSelect").value;
+      const filtered = getFilteredSpots();
+      const filteredIds = new Set(filtered.map(s => s.id));
+      renderCrowdChart(filteredIds, checkDate);
+      renderMap(filteredIds);
+      renderCards(filtered, checkDate);
+      renderSaved();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateFilterChips();
+      renderAll();
+    });
+  </script>
+</body>
+</html>
